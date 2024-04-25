@@ -112,7 +112,7 @@ settings:
     api_key: ""
     version_id: ""
     project_id: ""
-    runtime_endpoint: ""
+    runtime_endpoint: "general-runtime.voiceflow.com"
   slack:
     app_token: ""
     bot_token: ""

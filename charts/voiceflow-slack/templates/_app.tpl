@@ -5,7 +5,7 @@ app env settings
 - name: VOICEFLOW_API_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "voiceflow-slack.serviceAccountName" . }}
+      name: {{ include "voiceflow-slack.fullname" . }}
       key: voiceflow-api-key
 {{- with .Values.settings.voiceflow }}
 - name: VOICEFLOW_VERSION_ID
@@ -18,16 +18,16 @@ app env settings
 - name: SLACK_APP_TOKEN
   valueFrom:
     secretKeyRef:
-      name: {{ include "voiceflow-slack.serviceAccountName" . }}
+      name: {{ include "voiceflow-slack.fullname" . }}
       key: slack-app-token
 - name: SLACK_BOT_TOKEN
   valueFrom:
     secretKeyRef:
-      name: {{ include "voiceflow-slack.serviceAccountName" . }}
+      name: {{ include "voiceflow-slack.fullname" . }}
       key: slack-bot-token
 - name: SLACK_SIGNING_SECRET
   valueFrom:
     secretKeyRef:
-      name: {{ include "voiceflow-slack.serviceAccountName" . }}
+      name: {{ include "voiceflow-slack.fullname" . }}
       key: slack-signing-secret
 {{- end -}}
