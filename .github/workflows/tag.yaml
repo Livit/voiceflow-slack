@@ -1,0 +1,43 @@
+name: Bump semver
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tag:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check if file .notag exist
+        id: check_notag
+        run: |
+          if [ -e ".notag" ]; then
+            echo SKIP_TAG=true >> $GITHUB_ENV
+          else
+            echo SKIP_TAG=false >> $GITHUB_ENV
+          fi
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        if: ${{ env.SKIP_TAG == 'false' }}
+        with:
+          tag_prefix: ""
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fetch_all_tags: true
+          create_annotated_tag: true
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        if: ${{ env.SKIP_TAG == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          generateReleaseNotes: true
