@@ -100,32 +100,39 @@ app.message(ANY_WORD_REGEX, async ({ message, say, client }) => {
     message.subtype === 'message_changed' ||
     message.subtype === 'message_deleted' ||
     message.subtype === 'message_replied'
-  )
-    return
+  ) {
+    return;
+  }
 
-  // Cleaning user's utterance from Slack
-  let utterance = stripEmojis(message.text)
-  // Formating Slack email format from <mailto:name@email.com|name@email.com> to name@email.com
-  utterance = cleanEmail(utterance)
+  // Concatenate lines and trim the message
+  let utterance = message.text
+    .split('\n')
+    .map(line => line.trim())
+    .join(' '); // Handle new lines here
+  
+  utterance = stripEmojis(utterance);
+  utterance = cleanEmail(utterance);
 
-  console.log('Utterance:', utterance)
+  console.log('Processed Utterance:', utterance);
 
+  // Rest of your existing logic for interacting with the message
   if (utterance === 'hi' || utterance === 'hi there') {
     await interact(message.user, say, client, {
       type: 'launch',
-    })
+    });
   } else {
     await interact(message.user, say, client, {
       type: 'text',
       payload: utterance,
-    })
+    });
   }
-})
-  ; (async () => {
-    // Start the app
-    await app.start()
-    console.log(`⚡️ Bolt app is running!`)
-  })()
+});
+
+(async () => {
+  // Start the app
+  await app.start();
+  console.log(`⚡️ Bolt app is running!`);
+})()
 
 // Interact with Voiceflow | Dialog Manager API
 async function interact(userID, say, client, request) {
