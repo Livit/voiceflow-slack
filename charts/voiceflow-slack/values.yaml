@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: nginx
@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 3000
+  port: 80
 
 ingress:
   enabled: false
@@ -71,14 +71,14 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+livenessProbe: {}
+  # httpGet:
+  #   path: /
+  #   port: http
+readinessProbe: {}
+  # httpGet:
+  #   path: /
+  #   port: http
 
 autoscaling:
   enabled: false
@@ -112,7 +112,7 @@ settings:
     api_key: ""
     version_id: ""
     project_id: ""
-    runtime_endpoint: ""
+    runtime_endpoint: "general-runtime.voiceflow.com"
   slack:
     app_token: ""
     bot_token: ""
